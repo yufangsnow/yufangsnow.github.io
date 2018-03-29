@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。 阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出量种类型的异常：InterruptedException和Keep">
+<meta name="description" content="Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。 阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出两种类型的异常：InterruptedException和Keep">
 <meta name="keywords" content="大数据,Zookeeper">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于Zookeeper的异常">
 <meta property="og:url" content="http://yoursite.com/2018/03/29/关于Zookeeper的异常/index.html">
 <meta property="og:site_name" content="Yufang&#39;s blog">
-<meta property="og:description" content="Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。 阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出量种类型的异常：InterruptedException和Keep">
+<meta property="og:description" content="Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。 阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出两种类型的异常：InterruptedException和Keep">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-29T13:13:22.028Z">
+<meta property="og:updated_time" content="2018-03-29T13:23:15.644Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于Zookeeper的异常">
-<meta name="twitter:description" content="Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。 阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出量种类型的异常：InterruptedException和Keep">
+<meta name="twitter:description" content="Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。 阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出两种类型的异常：InterruptedException和Keep">
 
 
 
@@ -331,16 +331,16 @@
 
       
         <p>Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。</p>
-<p>阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出量种类型的异常：InterruptedException和KeeperException。下面将分别进行讲述。</p>
+<p>阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出两种类型的异常：InterruptedException和KeeperException。下面将分别进行讲述。</p>
 <hr>
-<h2 id="InterruptedException异常"><a href="#InterruptedException异常" class="headerlink" title="InterruptedException异常"></a>InterruptedException异常</h2><p>如果操作被中断，则会有一个<strong>InterruptedException</strong>异常被抛出。<strong>InterruptedException</strong>异常并不是发生了错误，而是表明操作因为某种原因被取消。</p>
+<h2 id="InterruptedException异常"><a href="#InterruptedException异常" class="headerlink" title="InterruptedException异常"></a>InterruptedException异常</h2><p>如果操作被中断，则会有一个<strong>InterruptedException</strong>异常被抛出。<strong>InterruptedException</strong>异常的出现并不代表发生了错误，而是表明当前操作因为某种原因被取消。</p>
 <hr>
-<h2 id="KeeperException异常"><a href="#KeeperException异常" class="headerlink" title="KeeperException异常"></a>KeeperException异常</h2><p>如果Zookeeper服务器发出一个错误信号，或者与服务器存在通信问题，这是会抛出<strong>KeeperException</strong>异常。 <strong>KeeperException</strong>异常包含很多子类，这些子类代表着不同的错误情况并且对应一个关于错误类型信息的代码.</p>
-<p> <strong>KeeperException</strong>异常分为三大类：</p>
+<h2 id="KeeperException异常"><a href="#KeeperException异常" class="headerlink" title="KeeperException异常"></a>KeeperException异常</h2><p>如果Zookeeper服务器发出一个错误信号，或者应用程序与服务器存在通信问题，这时会抛出<strong>KeeperException</strong>异常。 <strong>KeeperException</strong>异常包含很多子类，这些子类代表着不同的错误情况并且对应一个关于错误类型信息的代码.</p>
+<p> <strong>KeeperException</strong>异常大致可分为三大类：</p>
 <ul>
-<li><strong>状态异常</strong>：通常情况下，如果同一时间有另外一个进程正在对znode进行修改，导致当前的操作无法应用于znode而引发的异常，为状态异常。例如通过setData操作对znode的内容进行更新时，发现版本号不一致，这时会抛出一个<strong>KeeperException.BadVersionException</strong>异常，这种异常是非常常见的。</li>
+<li><strong>状态异常</strong>：通常情况下，如果同一时刻有另外一个进程正在对znode进行修改，导致当前的操作无法应用于znode而引发的异常，称为状态异常。例如通过setData操作对znode的内容进行更新时，发现版本号不一致，这时会抛出一个<strong>KeeperException.BadVersionException</strong>异常，这种异常是非常常见的。</li>
 <li><strong>可恢复的异常</strong>：应用程序在同一个Zookeeper会话中能够恢复的异常为可恢复异常。例如Zookeeper的客户端与服务器端丢失连接，会抛出<strong>KeeperException.ConnectionLossException</strong>,Zookeeper会尝试重新连接，一旦重连成功，可确保当前的会话是完整的。</li>
-<li><strong>不可恢复的异常</strong>：在某些情况下，因为Zookeeper会话的失效、身份验证的失败等导致的异常，为不可恢复的异常。一旦发生此类异常，客户端不得不重新连接到Zookeeper并且重建之前的状态。</li>
+<li><strong>不可恢复的异常</strong>：在某些情况下，因为Zookeeper会话的失效、身份验证失败等导致的异常，为不可恢复的异常。一旦发生此类异常，客户端不得不重新连接到Zookeeper并且重建之前的状态。</li>
 </ul>
 <blockquote>
 <p><strong>Note:</strong> 未完待续.</p>
