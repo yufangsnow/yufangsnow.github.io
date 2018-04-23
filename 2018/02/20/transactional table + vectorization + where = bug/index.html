@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Yufang&#39;s blog">
 <meta property="og:description" content="Hive作为Hadoop的数据仓库，在很多公司有这广泛的应用场景，一般情况下，hive的数据都通过sqoop等方式从传统的oracle等数据库进行批量导入。当然，技术不会总是一层不变，应用的需要催进着技术的不断演变。如今，hive也提供了事务的特性，用来支持行级的更新。 应用的过程中，我们发现hive transaction在开启了vectorization优化的情况下，如果查询语句包含了wher">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-23T13:26:38.425Z">
+<meta property="og:updated_time" content="2018-04-23T13:31:37.101Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hive:transactional table + vectorization + where = bug">
 <meta name="twitter:description" content="Hive作为Hadoop的数据仓库，在很多公司有这广泛的应用场景，一般情况下，hive的数据都通过sqoop等方式从传统的oracle等数据库进行批量导入。当然，技术不会总是一层不变，应用的需要催进着技术的不断演变。如今，hive也提供了事务的特性，用来支持行级的更新。 应用的过程中，我们发现hive transaction在开启了vectorization优化的情况下，如果查询语句包含了wher">
@@ -358,10 +358,10 @@
 <h2 id="hive-transaction的限制"><a href="#hive-transaction的限制" class="headerlink" title="hive transaction的限制"></a>hive transaction的限制</h2><p><strong>hive transaction</strong>有诸多限制，大致包括以下条件：</p>
 <ul>
 <li><strong>存储格式为orc</strong></li>
+<li>分区表</li>
+<li>bucketed<br>所以，建表语句一般类似这样：<br><pre><br>  DROP TABLE IF EXISTS stocks;<br>  CREATE EXTERNAL TABLE stocks (<br>  date STRING,<br>  open DOUBLE,<br>  high DOUBLE,<br>  low DOUBLE,<br>  close DOUBLE,<br>  volume BIGINT,<br>  adj_close DOUBLE)<br>  PARTITIONED BY(year STRING)<br>  CLUSTERED BY (date) into 3 buckets<br>  STORED AS ORC；<br></pre><br>除此之外，还需要对hive增加如下配置：  </li>
 </ul>
 <ol>
-<li>分区表</li>
-<li>bucketed<br>所以，建表语句一般类似这样：<br><pre><br> DROP TABLE IF EXISTS stocks;<br> CREATE EXTERNAL TABLE stocks (<br> date STRING,<br> open DOUBLE,<br> high DOUBLE,<br> low DOUBLE,<br> close DOUBLE,<br> volume BIGINT,<br> adj_close DOUBLE)<br> PARTITIONED BY(year STRING)<br> CLUSTERED BY (date) into 3 buckets<br> STORED AS ORC；<br></pre><br>除此之外，还需要对hive增加如下配置：  </li>
 <li>hive.txn.manager = org.apache.hadoop.hive.ql.lockmgr.DbTxnManager  </li>
 <li>hive.compactor.initiator.on = true  </li>
 <li>hive.compactor.worker.threads &gt; 0 (eg. 5)  </li>

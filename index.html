@@ -517,10 +517,10 @@
 <h2 id="hive-transaction的限制"><a href="#hive-transaction的限制" class="headerlink" title="hive transaction的限制"></a>hive transaction的限制</h2><p><strong>hive transaction</strong>有诸多限制，大致包括以下条件：</p>
 <ul>
 <li><strong>存储格式为orc</strong></li>
+<li>分区表</li>
+<li>bucketed<br>所以，建表语句一般类似这样：<br><pre><br>  DROP TABLE IF EXISTS stocks;<br>  CREATE EXTERNAL TABLE stocks (<br>  date STRING,<br>  open DOUBLE,<br>  high DOUBLE,<br>  low DOUBLE,<br>  close DOUBLE,<br>  volume BIGINT,<br>  adj_close DOUBLE)<br>  PARTITIONED BY(year STRING)<br>  CLUSTERED BY (date) into 3 buckets<br>  STORED AS ORC；<br></pre><br>除此之外，还需要对hive增加如下配置：  </li>
 </ul>
 <ol>
-<li>分区表</li>
-<li>bucketed<br>所以，建表语句一般类似这样：<br><pre><br> DROP TABLE IF EXISTS stocks;<br> CREATE EXTERNAL TABLE stocks (<br> date STRING,<br> open DOUBLE,<br> high DOUBLE,<br> low DOUBLE,<br> close DOUBLE,<br> volume BIGINT,<br> adj_close DOUBLE)<br> PARTITIONED BY(year STRING)<br> CLUSTERED BY (date) into 3 buckets<br> STORED AS ORC；<br></pre><br>除此之外，还需要对hive增加如下配置：  </li>
 <li>hive.txn.manager = org.apache.hadoop.hive.ql.lockmgr.DbTxnManager  </li>
 <li>hive.compactor.initiator.on = true  </li>
 <li>hive.compactor.worker.threads &gt; 0 (eg. 5)  </li>
