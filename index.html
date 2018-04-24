@@ -367,15 +367,18 @@
     &lt;version&gt;${project.sparkversion}&lt;/version&gt;
     &lt;scope&gt;provided&lt;/scope&gt;
 &lt;/dependency&gt;
-</pre>  **注意：不要在算法中设置spark-master**，这个很关键。  
-
-----------
+</pre>
 
 
-新建Maven工程
----------
 
-Maven工程是一种很好的选择，这时我们需要添加一些必要的依赖，包括hadoop和spark的常用依赖，另外需要创建一个配置文件用来设置一些与yarn和spark相关的参数，示例如下:  
+
+
+
+
+
+
+
+<h2 id="新建Maven工程"><a href="#新建Maven工程" class="headerlink" title="新建Maven工程"></a>新建Maven工程</h2><p>Maven工程是一种很好的选择，这时我们需要添加一些必要的依赖，包括hadoop和spark的常用依赖，另外需要创建一个配置文件用来设置一些与yarn和spark相关的参数，示例如下:  </p>
 <pre>fs.defaultFS=hdfs\://hostname\:8020
 mapreduce.framework.name=yarn
 yarn.resourcemanager.hostname=hostname
@@ -396,7 +399,7 @@ spark.executor.memory=8G
 <p><pre>public class SparkSubmitFromRemote {<br>    public static void submitRemote(String[] args0, String userName){<br>        System.setProperty(“HADOOP_USER_NAME”,userName);<br>        Configuration conf = new Configuration();<br>        String os = System.getProperty(“os.name”);<br>        boolean cross_platform = false;<br>        if (os.contains(“Windows”)) {<br>            cross_platform = true;<br>        }<br>        conf.setBoolean(“mapreduce.app-submission.cross-platform”, cross_platform);<br>        conf.set(“fs.defaultFS”, SparkMLConfig.getProp().getProperty(“fs.defaultFS”));<br>        conf.set(“mapreduce.framework.name”, SparkMLConfig.getProp().getProperty(“mapreduce.framework.name”));<br>        conf.set(“yarn.resourcemanager.hostname”, SparkMLConfig.getProp().getProperty(“yarn.resourcemanager.hostname”));<br>        conf.set(“yarn.resourcemanager.address”, SparkMLConfig.getProp().getProperty(“yarn.resourcemanager.address”));<br>        conf.set(“yarn.resourcemanager.scheduler.address”, SparkMLConfig.getProp().getProperty(“yarn.resourcemanager.scheduler.address”));<br>        conf.set(“mapreduce.jobhistory.address”, SparkMLConfig.getProp().getProperty(“mapreduce.jobhistory.address”));<br>        conf.set(“fs.hdfs.impl”, SparkMLConfig.getProp().getProperty(“fs.hdfs.impl”));//no hdfs filesystem<br>        conf.set(“fs.file.impl”, SparkMLConfig.getProp().getProperty(“fs.file.impl”));//no file filesystem<br>        System.setProperty(“SPARK_YARN_MODE”, “true”);<br>        SparkConf sparkConf = new SparkConf();<br>        sparkConf.set(“spark.yarn.jar”, SparkMLConfig.getProp().getProperty(“spark.yarn.jar”));<br>        sparkConf.set(“spark.yarn.preserve.staging.files”, SparkMLConfig.getProp().getProperty(“spark.yarn.preserve.staging.files”));<br>        ClientArguments cArgs = new ClientArguments(args0, sparkConf);<br>        new Client(cArgs, conf, sparkConf).run();<br>    }<br>}<br></pre></p>
 <h2 id="上传依赖jar至HDFS"><a href="#上传依赖jar至HDFS" class="headerlink" title="上传依赖jar至HDFS"></a>上传依赖jar至HDFS</h2><p>将spark-assembly-1.6.1-hadoop2.6.0.jar，spark-ml*.jar，yarn-site.xml上传到hdfs相应的目录。 </p>
 <blockquote>
-<p><strong>Note:</strong> spark版本为1.6.1，hadoop版本为2.6.0.</p>
+<p><strong>Note:</strong><br>1.spark版本为1.6.1，hadoop版本为2.6.0.<br>2.不要在封装算子时设置spark-master，这个很关键。</p>
 </blockquote>
 
           
