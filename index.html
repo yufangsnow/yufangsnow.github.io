@@ -262,6 +262,190 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/24/spark on yarn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YuFang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yufang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/24/spark on yarn/" itemprop="url">spark on yarn</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-24T22:08:20+08:00">
+                2018-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Apache Hadoop YARN （Yet Another Resource Negotiator，另一种资源协调者）是一种新的 Hadoop 资源管理器，它是一个通用资源管理系统。我们不仅可以在yarn上运行MR任务，也可以运行spark计算任务或者是其他的任务。</p>
+<p>通过spark-submit，我们可以很方便地向yarn提交spark任务，但是这种方式不够灵活，而且对技术素养有一定的要求。如果业务人员或者数据科学家需要在修改几个参数后向集群提交spark机器学习任务，他们更愿意通过界面进行操作。此篇博文即对通过java程序提交spark on yarn任务进行简要介绍。</p>
+<hr>
+<h2 id="spark机器学习算子的封装"><a href="#spark机器学习算子的封装" class="headerlink" title="spark机器学习算子的封装"></a>spark机器学习算子的封装</h2><p><strong>spark mllib</strong>提供了很多常用的算法，包括聚类、分类、推荐、回归和预测等，通过对它们进行封装可以解决很多基本问题。  </p>
+<p>不管是通过IntelliJ IDEA还是Scala IDE都可以对spark程序进行打包，打包过程中注意不要将hadoop和spark相关的依赖打入算子包中，这样可以避免算子的包过大。我们以maven工程为例，pom.xml中应该对涉及spark的依赖的scope限制为provided,如下所示：</p>
+<pre>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.spark&lt;/groupId&gt;
+    &lt;artifactId&gt;spark-mllib_2.10&lt;/artifactId&gt;
+    &lt;version&gt;${project.sparkversion}&lt;/version&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+</pre>  **注意：不要在算法中设置spark-master**，这个很关键。  
+
+----------
+
+
+新建Maven工程
+---------
+
+Maven工程是一种很好的选择，这时我们需要添加一些必要的依赖，包括hadoop和spark的常用依赖，另外需要创建一个配置文件用来设置一些与yarn和spark相关的参数，示例如下:  
+<pre>fs.defaultFS=hdfs\://hostname\:8020
+mapreduce.framework.name=yarn
+yarn.resourcemanager.hostname=hostname
+yarn.resourcemanager.address=hostname\:8032
+yarn.resourcemanager.scheduler.address=hostname\:8030
+mapreduce.jobhistory.address=http://hostname\:19888
+fs.hdfs.impl=org.apache.hadoop.hdfs.DistributedFileSystem
+fs.file.impl=org.apache.hadoop.fs.LocalFileSystem
+spark.yarn.preserve.staging.files=true
+spark.yarn.jar=hdfs\://hostname\:8020/user/hdfs/lib/spark-assembly-1.6.1-hadoop2.6.0.jar
+spark.ml.jar=hdfs\://hostname\:8020/user/hdfs/lib/spark-ml-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+yarn.site.xml=hdfs\://hostname\:8020/user/hdfs/lib/yarn-site.xml
+spark.executor.memory=8G
+</pre>  
+
+
+<h2 id="新建SparkSubmitFromRemote类"><a href="#新建SparkSubmitFromRemote类" class="headerlink" title="新建SparkSubmitFromRemote类"></a>新建SparkSubmitFromRemote类</h2><p>这是我们需要一个启动类来从远程提交spark任务到yarn上执行，示例代码如下：  </p>
+<p><pre>public class SparkSubmitFromRemote {<br>    public static void submitRemote(String[] args0, String userName){<br>        System.setProperty(“HADOOP_USER_NAME”,userName);<br>        Configuration conf = new Configuration();<br>        String os = System.getProperty(“os.name”);<br>        boolean cross_platform = false;<br>        if (os.contains(“Windows”)) {<br>            cross_platform = true;<br>        }<br>        conf.setBoolean(“mapreduce.app-submission.cross-platform”, cross_platform);<br>        conf.set(“fs.defaultFS”, SparkMLConfig.getProp().getProperty(“fs.defaultFS”));<br>        conf.set(“mapreduce.framework.name”, SparkMLConfig.getProp().getProperty(“mapreduce.framework.name”));<br>        conf.set(“yarn.resourcemanager.hostname”, SparkMLConfig.getProp().getProperty(“yarn.resourcemanager.hostname”));<br>        conf.set(“yarn.resourcemanager.address”, SparkMLConfig.getProp().getProperty(“yarn.resourcemanager.address”));<br>        conf.set(“yarn.resourcemanager.scheduler.address”, SparkMLConfig.getProp().getProperty(“yarn.resourcemanager.scheduler.address”));<br>        conf.set(“mapreduce.jobhistory.address”, SparkMLConfig.getProp().getProperty(“mapreduce.jobhistory.address”));<br>        conf.set(“fs.hdfs.impl”, SparkMLConfig.getProp().getProperty(“fs.hdfs.impl”));//no hdfs filesystem<br>        conf.set(“fs.file.impl”, SparkMLConfig.getProp().getProperty(“fs.file.impl”));//no file filesystem<br>        System.setProperty(“SPARK_YARN_MODE”, “true”);<br>        SparkConf sparkConf = new SparkConf();<br>        sparkConf.set(“spark.yarn.jar”, SparkMLConfig.getProp().getProperty(“spark.yarn.jar”));<br>        sparkConf.set(“spark.yarn.preserve.staging.files”, SparkMLConfig.getProp().getProperty(“spark.yarn.preserve.staging.files”));<br>        ClientArguments cArgs = new ClientArguments(args0, sparkConf);<br>        new Client(cArgs, conf, sparkConf).run();<br>    }<br>}<br></pre></p>
+<h2 id="上传依赖jar至HDFS"><a href="#上传依赖jar至HDFS" class="headerlink" title="上传依赖jar至HDFS"></a>上传依赖jar至HDFS</h2><p>将spark-assembly-1.6.1-hadoop2.6.0.jar，spark-ml*.jar，yarn-site.xml上传到hdfs相应的目录。 </p>
+<blockquote>
+<p><strong>Note:</strong> spark版本为1.6.1，hadoop版本为2.6.0.</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/29/关于Zookeeper的异常/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -646,7 +830,7 @@ at org.apache.hadoop.hive.ql.exec.vector.VectorSelectOperator.processOp(VectorSe
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -657,7 +841,7 @@ at org.apache.hadoop.hive.ql.exec.vector.VectorSelectOperator.processOp(VectorSe
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -668,7 +852,7 @@ at org.apache.hadoop.hive.ql.exec.vector.VectorSelectOperator.processOp(VectorSe
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
