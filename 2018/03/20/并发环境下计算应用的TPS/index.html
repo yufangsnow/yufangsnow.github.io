@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="大数据,spark,yarn," />
+  <meta name="keywords" content="java,基础知识," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Apache Hadoop YARN （Yet Another Resource Negotiator，另一种资源协调者）是一种新的 Hadoop 资源管理器，它是一个通用资源管理系统。我们不仅可以在yarn上运行MR任务，也可以运行spark计算任务或者是其他的任务。 通过spark-submit，我们可以很方便地向yarn提交spark任务，但是这种方式不够灵活，而且对技术素养有一定的要求。如">
-<meta name="keywords" content="大数据,spark,yarn">
+<meta name="description" content="工作的过程中，我们往往需要在并发环境中对即将上线的应用进行压力测试，其中TPS（Transaction Per Second,每秒事务处理量）是一个很重要的指标。特别是当测试的过程中，要求借助特定开发的工具包，因而无法使用Jmeter等软件进行性能测试，这时候java.util.concurrent包下的CountDownLatch就派上了用场。 CountDownLatch是一个同步工具类，它允">
+<meta name="keywords" content="java,基础知识">
 <meta property="og:type" content="article">
-<meta property="og:title" content="spark on yarn">
-<meta property="og:url" content="http://yoursite.com/2018/04/24/spark on yarn/index.html">
+<meta property="og:title" content="并发环境下计算应用的TPS">
+<meta property="og:url" content="http://yoursite.com/2018/03/20/并发环境下计算应用的TPS/index.html">
 <meta property="og:site_name" content="Yufang&#39;s blog">
-<meta property="og:description" content="Apache Hadoop YARN （Yet Another Resource Negotiator，另一种资源协调者）是一种新的 Hadoop 资源管理器，它是一个通用资源管理系统。我们不仅可以在yarn上运行MR任务，也可以运行spark计算任务或者是其他的任务。 通过spark-submit，我们可以很方便地向yarn提交spark任务，但是这种方式不够灵活，而且对技术素养有一定的要求。如">
+<meta property="og:description" content="工作的过程中，我们往往需要在并发环境中对即将上线的应用进行压力测试，其中TPS（Transaction Per Second,每秒事务处理量）是一个很重要的指标。特别是当测试的过程中，要求借助特定开发的工具包，因而无法使用Jmeter等软件进行性能测试，这时候java.util.concurrent包下的CountDownLatch就派上了用场。 CountDownLatch是一个同步工具类，它允">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-24T15:46:20.301Z">
+<meta property="og:updated_time" content="2018-05-03T07:32:37.761Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="spark on yarn">
-<meta name="twitter:description" content="Apache Hadoop YARN （Yet Another Resource Negotiator，另一种资源协调者）是一种新的 Hadoop 资源管理器，它是一个通用资源管理系统。我们不仅可以在yarn上运行MR任务，也可以运行spark计算任务或者是其他的任务。 通过spark-submit，我们可以很方便地向yarn提交spark任务，但是这种方式不够灵活，而且对技术素养有一定的要求。如">
+<meta name="twitter:title" content="并发环境下计算应用的TPS">
+<meta name="twitter:description" content="工作的过程中，我们往往需要在并发环境中对即将上线的应用进行压力测试，其中TPS（Transaction Per Second,每秒事务处理量）是一个很重要的指标。特别是当测试的过程中，要求借助特定开发的工具包，因而无法使用Jmeter等软件进行性能测试，这时候java.util.concurrent包下的CountDownLatch就派上了用场。 CountDownLatch是一个同步工具类，它允">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/24/spark on yarn/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/20/并发环境下计算应用的TPS/"/>
 
 
 
 
 
-  <title>spark on yarn | Yufang's blog</title>
+  <title>并发环境下计算应用的TPS | Yufang's blog</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/24/spark on yarn/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/20/并发环境下计算应用的TPS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YuFang">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">spark on yarn</h1>
+          <h1 class="post-title" itemprop="name headline">并发环境下计算应用的TPS</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-24T22:08:20+08:00">
-                2018-04-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-20T21:08:20+08:00">
+                2018-03-20
               </time>
             
 
@@ -315,8 +315,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spark/" itemprop="url" rel="index">
-                    <span itemprop="name">Spark</span>
+                  <a href="/categories/基础知识/" itemprop="url" rel="index">
+                    <span itemprop="name">基础知识</span>
                   </a>
                 </span>
 
@@ -352,51 +352,15 @@
       
 
       
-        <p>Apache Hadoop YARN （Yet Another Resource Negotiator，另一种资源协调者）是一种新的 Hadoop 资源管理器，它是一个通用资源管理系统。我们不仅可以在yarn上运行MR任务，也可以运行spark计算任务或者是其他的任务。</p>
-<p>通过spark-submit，我们可以很方便地向yarn提交spark任务，但是这种方式不够灵活，而且对技术素养有一定的要求。如果业务人员或者数据科学家需要在修改几个参数后向集群提交spark机器学习任务，他们更愿意通过界面进行操作。此篇博文即对通过java程序提交spark on yarn任务进行简要介绍。</p>
+        <p>工作的过程中，我们往往需要在并发环境中对即将上线的应用进行压力测试，其中TPS（Transaction Per Second,每秒事务处理量）是一个很重要的指标。特别是当测试的过程中，要求借助特定开发的工具包，因而无法使用Jmeter等软件进行性能测试，这时候java.util.concurrent包下的CountDownLatch就派上了用场。</p>
+<p>CountDownLatch是一个同步工具类，它允许一个或多个线程一直等待，直到其他线程的操作执行完后再执行。</p>
 <hr>
-<h2 id="spark机器学习算子的封装"><a href="#spark机器学习算子的封装" class="headerlink" title="spark机器学习算子的封装"></a>spark机器学习算子的封装</h2><p><strong>spark mllib</strong>提供了很多常用的算法，包括聚类、分类、推荐、回归和预测等，通过对它们进行封装可以解决很多基本问题。  </p>
-<p>不管是通过IntelliJ IDEA还是Scala IDE都可以对spark程序进行打包，打包过程中注意不要将hadoop和spark相关的依赖打入算子包中，这样可以避免算子的包过大。我们以maven工程为例，pom.xml中应该对涉及spark的依赖的scope限制为provided,如下所示：</p>
-<pre>
-&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.spark&lt;/groupId&gt;
-    &lt;artifactId&gt;spark-mllib_2.10&lt;/artifactId&gt;
-    &lt;version&gt;${project.sparkversion}&lt;/version&gt;
-    &lt;scope&gt;provided&lt;/scope&gt;
-&lt;/dependency&gt;
-</pre>
-
-
-
-
-
-
-
-
-
-
-<h2 id="新建Maven工程"><a href="#新建Maven工程" class="headerlink" title="新建Maven工程"></a>新建Maven工程</h2><p>Maven工程是一种很好的选择，这时我们需要添加一些必要的依赖，包括hadoop和spark的常用依赖，另外需要创建一个配置文件用来设置一些与yarn和spark相关的参数，示例如下:  </p>
-<pre>fs.defaultFS=hdfs\://hostname\:8020
-mapreduce.framework.name=yarn
-yarn.resourcemanager.hostname=hostname
-yarn.resourcemanager.address=hostname\:8032
-yarn.resourcemanager.scheduler.address=hostname\:8030
-mapreduce.jobhistory.address=http://hostname\:19888
-fs.hdfs.impl=org.apache.hadoop.hdfs.DistributedFileSystem
-fs.file.impl=org.apache.hadoop.fs.LocalFileSystem
-spark.yarn.preserve.staging.files=true
-spark.yarn.jar=hdfs\://hostname\:8020/user/hdfs/lib/spark-assembly-1.6.1-hadoop2.6.0.jar
-spark.ml.jar=hdfs\://hostname\:8020/user/hdfs/lib/spark-ml-0.0.1-SNAPSHOT-jar-with-dependencies.jar
-yarn.site.xml=hdfs\://hostname\:8020/user/hdfs/lib/yarn-site.xml
-spark.executor.memory=8G
-</pre>  
-
-
-<h2 id="新建SparkSubmitFromRemote类"><a href="#新建SparkSubmitFromRemote类" class="headerlink" title="新建SparkSubmitFromRemote类"></a>新建SparkSubmitFromRemote类</h2><p>这是我们需要一个启动类来从远程提交spark任务到yarn上执行，示例代码如下：  </p>
-<p><pre>public class SparkSubmitFromRemote {<br>    public static void submitRemote(String[] args0, String userName){<br>        System.setProperty(“HADOOP_USER_NAME”,userName);<br>        Configuration conf = new Configuration();<br>        String os = System.getProperty(“os.name”);<br>        boolean cross_platform = false;<br>        if (os.contains(“Windows”)) {<br>            cross_platform = true;<br>        }<br>        conf.setBoolean(“mapreduce.app-submission.cross-platform”, cross_platform);<br>        conf.set(“fs.defaultFS”, SparkMLConfig.getProp().getProperty(“fs.defaultFS”));<br>        conf.set(“mapreduce.framework.name”, SparkMLConfig.getProp().getProperty(“mapreduce.framework.name”));<br>        conf.set(“yarn.resourcemanager.hostname”, SparkMLConfig.getProp().getProperty(“yarn.resourcemanager.hostname”));<br>        conf.set(“yarn.resourcemanager.address”, SparkMLConfig.getProp().getProperty(“yarn.resourcemanager.address”));<br>        conf.set(“yarn.resourcemanager.scheduler.address”, SparkMLConfig.getProp().getProperty(“yarn.resourcemanager.scheduler.address”));<br>        conf.set(“mapreduce.jobhistory.address”, SparkMLConfig.getProp().getProperty(“mapreduce.jobhistory.address”));<br>        conf.set(“fs.hdfs.impl”, SparkMLConfig.getProp().getProperty(“fs.hdfs.impl”));//no hdfs filesystem<br>        conf.set(“fs.file.impl”, SparkMLConfig.getProp().getProperty(“fs.file.impl”));//no file filesystem<br>        System.setProperty(“SPARK_YARN_MODE”, “true”);<br>        SparkConf sparkConf = new SparkConf();<br>        sparkConf.set(“spark.yarn.jar”, SparkMLConfig.getProp().getProperty(“spark.yarn.jar”));<br>        sparkConf.set(“spark.yarn.preserve.staging.files”, SparkMLConfig.getProp().getProperty(“spark.yarn.preserve.staging.files”));<br>        ClientArguments cArgs = new ClientArguments(args0, sparkConf);<br>        new Client(cArgs, conf, sparkConf).run();<br>    }<br>}<br></pre></p>
-<h2 id="上传依赖jar至HDFS"><a href="#上传依赖jar至HDFS" class="headerlink" title="上传依赖jar至HDFS"></a>上传依赖jar至HDFS</h2><p>将spark-assembly-1.6.1-hadoop2.6.0.jar，spark-ml*.jar，yarn-site.xml上传到hdfs相应的目录。 </p>
+<h2 id="CountDownLatch测试类的编写"><a href="#CountDownLatch测试类的编写" class="headerlink" title="CountDownLatch测试类的编写"></a>CountDownLatch测试类的编写</h2><p><strong>CountDownLatch</strong>的测试类如下所示。其中，countDown()方法可以让线程计数器减1；await()方法可以让当前线程处于等待状态，直到线程计数器的值减小到0或者线程被中断。  </p>
+<p>正常测试中，将以下代码run()方法中的Thread.sleep()替换为业务逻辑代码即可。</p>
+<p><pre>public class CountDownLatchTest implements Runnable{<br>    private static CountDownLatch cdt = new CountDownLatch(10);<br>    public void run() {<br>        System.out.println(“ThreadName:” + Thread.currentThread().getName());<br>        try {<br>            Thread.sleep(2000);<br>        } catch (InterruptedException e) {<br>            e.printStackTrace();<br>        }<br>        cdt.countDown();<br>    }<br>    public static void main(String[] args) {<br>        long start = System.currentTimeMillis();<br>        for (int i = 1; i &lt;= 10; i++) {<br>            new Thread(new CountDownLatchTest(),”Thread”+i).start();<br>        }<br>        try {<br>            cdt.await();<br>        } catch (InterruptedException e) {<br>            e.printStackTrace();<br>        }<br>        long end = System.currentTimeMillis();<br>        System.out.println(“执行时间（s）：” + (end - start) / 1000);<br>    }<br>}<br></pre></p>
+<h2 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h2><p><pre>ThreadName:Thread1<br>ThreadName:Thread2<br>ThreadName:Thread3<br>ThreadName:Thread4<br>ThreadName:Thread5<br>ThreadName:Thread6<br>ThreadName:Thread7<br>ThreadName:Thread8<br>ThreadName:Thread9<br>ThreadName:Thread10<br>执行时间（s）：2<br></pre></p>
 <blockquote>
-<p><strong>Note:</strong><br>1.spark版本为1.6.1，hadoop版本为2.6.0.<br>2.不要在封装算子时设置spark-master，这个很关键。</p>
+<p><strong>Note:</strong><br>使用<strong>jdk1.8</strong>进行测试。</p>
 </blockquote>
 
       
@@ -415,11 +379,9 @@ spark.executor.memory=8G
       
         <div class="post-tags">
           
-            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+            <a href="/tags/java/" rel="tag"># java</a>
           
-            <a href="/tags/spark/" rel="tag"># spark</a>
-          
-            <a href="/tags/yarn/" rel="tag"># yarn</a>
+            <a href="/tags/基础知识/" rel="tag"># 基础知识</a>
           
         </div>
       
@@ -432,8 +394,8 @@ spark.executor.memory=8G
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/29/关于Zookeeper的异常/" rel="next" title="关于Zookeeper的异常">
-                <i class="fa fa-chevron-left"></i> 关于Zookeeper的异常
+              <a href="/2018/02/20/transactional table + vectorization + where = bug/" rel="next" title="hive:transactional table + vectorization + where = bug">
+                <i class="fa fa-chevron-left"></i> hive:transactional table + vectorization + where = bug
               </a>
             
           </div>
@@ -441,6 +403,10 @@ spark.executor.memory=8G
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/29/关于Zookeeper的异常/" rel="prev" title="关于Zookeeper的异常">
+                关于Zookeeper的异常 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -572,7 +538,7 @@ spark.executor.memory=8G
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#spark机器学习算子的封装"><span class="nav-number">1.</span> <span class="nav-text">spark机器学习算子的封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建Maven工程"><span class="nav-number">2.</span> <span class="nav-text">新建Maven工程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建SparkSubmitFromRemote类"><span class="nav-number">3.</span> <span class="nav-text">新建SparkSubmitFromRemote类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上传依赖jar至HDFS"><span class="nav-number">4.</span> <span class="nav-text">上传依赖jar至HDFS</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CountDownLatch测试类的编写"><span class="nav-number">1.</span> <span class="nav-text">CountDownLatch测试类的编写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试结果"><span class="nav-number">2.</span> <span class="nav-text">测试结果</span></a></li></ol></div>
             
 
           </div>
