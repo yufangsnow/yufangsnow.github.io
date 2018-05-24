@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="大数据,Zookeeper," />
+  <meta name="keywords" content="大数据,yarn,spark2,oozie," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。 阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出两种类型的异常：InterruptedException和Keep">
-<meta name="keywords" content="大数据,Zookeeper">
+<meta name="description" content="我们习惯于使用oozie进行MR任务的调度，例如通过oozie调度hive sql脚本或者sqoop脚本。HDP2.6版本的oozie4.2.0也提供了对spark1任务的原生支持，但是对spark2 Action的支持确不是很完善。 spark2提出了Structed Streaming，它通过将Spark Streaming与Spark SQL进行结合，使得实时流式数据计算可以和离线计算采用相">
+<meta name="keywords" content="大数据,yarn,spark2,oozie">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于Zookeeper的异常">
-<meta property="og:url" content="http://yoursite.com/2018/03/29/关于Zookeeper的异常/index.html">
+<meta property="og:title" content="通过oozie提交spark2作业到yarn">
+<meta property="og:url" content="http://yoursite.com/2018/05/24/通过oozie提交spark2作业到yarn/index.html">
 <meta property="og:site_name" content="Yufang&#39;s blog">
-<meta property="og:description" content="Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。 阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出两种类型的异常：InterruptedException和Keep">
+<meta property="og:description" content="我们习惯于使用oozie进行MR任务的调度，例如通过oozie调度hive sql脚本或者sqoop脚本。HDP2.6版本的oozie4.2.0也提供了对spark1任务的原生支持，但是对spark2 Action的支持确不是很完善。 spark2提出了Structed Streaming，它通过将Spark Streaming与Spark SQL进行结合，使得实时流式数据计算可以和离线计算采用相">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-30T01:26:16.744Z">
+<meta property="og:updated_time" content="2018-05-24T13:53:05.282Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于Zookeeper的异常">
-<meta name="twitter:description" content="Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。 阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出两种类型的异常：InterruptedException和Keep">
+<meta name="twitter:title" content="通过oozie提交spark2作业到yarn">
+<meta name="twitter:description" content="我们习惯于使用oozie进行MR任务的调度，例如通过oozie调度hive sql脚本或者sqoop脚本。HDP2.6版本的oozie4.2.0也提供了对spark1任务的原生支持，但是对spark2 Action的支持确不是很完善。 spark2提出了Structed Streaming，它通过将Spark Streaming与Spark SQL进行结合，使得实时流式数据计算可以和离线计算采用相">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/29/关于Zookeeper的异常/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/05/24/通过oozie提交spark2作业到yarn/"/>
 
 
 
 
 
-  <title>关于Zookeeper的异常 | Yufang's blog</title>
+  <title>通过oozie提交spark2作业到yarn | Yufang's blog</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/29/关于Zookeeper的异常/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/24/通过oozie提交spark2作业到yarn/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YuFang">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">关于Zookeeper的异常</h1>
+          <h1 class="post-title" itemprop="name headline">通过oozie提交spark2作业到yarn</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-29T20:34:36+08:00">
-                2018-03-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-24T22:08:20+08:00">
+                2018-05-24
               </time>
             
 
@@ -315,8 +315,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hadoop生态/" itemprop="url" rel="index">
-                    <span itemprop="name">Hadoop生态</span>
+                  <a href="/categories/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
                   </a>
                 </span>
 
@@ -352,21 +352,32 @@
       
 
       
-        <p>Zookeeper是目前广泛使用的分布式协调服务，Zookeeper的高可用性和高可靠性使得我们可以轻松地构建分布式应用。程序运行在分布式环境中的时候，可能会发生各种故障，有时我们可以通过查看Zookeeper的日志去发现故障的原因并及时解决故障。</p>
-<p>阅读Zookeeper的Java API，可以发现Zookeeper的操作一般会抛出两种类型的异常：InterruptedException和KeeperException。下面将分别进行讲述。</p>
+        <p>我们习惯于使用oozie进行MR任务的调度，例如通过oozie调度hive sql脚本或者sqoop脚本。HDP2.6版本的oozie4.2.0也提供了对spark1任务的原生支持，但是对spark2 Action的支持确不是很完善。</p>
+<p>spark2提出了Structed Streaming，它通过将Spark Streaming与Spark SQL进行结合，使得实时流式数据计算可以和离线计算采用相同的处理方式（DataFrame&amp;SQL）。Structured Streaming顾名思义，它将数据源和计算结果都映射成一张<strong>结构化</strong>的表，在计算的时候以结构化的方式去操作数据流，大大方便和提高了数据开发的效率。</p>
+<p>那么如何配置Oozie的Spark2 Action呢？这里可能充满一些不可预见的困难。</p>
 <hr>
-<h2 id="InterruptedException异常"><a href="#InterruptedException异常" class="headerlink" title="InterruptedException异常"></a>InterruptedException异常</h2><p>如果操作被中断，则会有一个<strong>InterruptedException</strong>异常被抛出。<strong>InterruptedException</strong>异常的出现并不代表发生了错误，而是表明当前操作因为某种原因被取消。</p>
-<hr>
-<h2 id="KeeperException异常"><a href="#KeeperException异常" class="headerlink" title="KeeperException异常"></a>KeeperException异常</h2><p>如果Zookeeper服务器发出一个错误信号，或者应用程序与服务器存在通信问题，这时会抛出<strong>KeeperException</strong>异常。 <strong>KeeperException</strong>异常包含很多子类，这些子类代表着不同的错误情况并且对应一个关于错误类型信息的代码.</p>
-<p> <strong>KeeperException</strong>异常大致可分为三大类：</p>
-<ul>
-<li><strong>状态异常</strong>：通常情况下，如果同一时刻有另外一个进程正在对znode进行修改，导致当前的操作无法应用于znode而引发的异常，称为状态异常。例如通过setData操作对znode的内容进行更新时，发现版本号不一致，这时会抛出一个<strong>KeeperException.BadVersionException</strong>异常，这种异常是非常常见的。</li>
-<li><strong>可恢复的异常</strong>：应用程序在同一个Zookeeper会话中能够恢复的异常为可恢复异常。例如Zookeeper的客户端与服务器端丢失连接，会抛出<strong>KeeperException.ConnectionLossException</strong>,Zookeeper会尝试重新连接，一旦重连成功，可确保当前的会话是完整的。</li>
-<li><strong>不可恢复的异常</strong>：在某些情况下，因为Zookeeper会话的失效、身份验证失败等导致的异常，为不可恢复的异常。一旦发生此类异常，客户端不得不重新连接到Zookeeper并且重建之前的状态。</li>
-</ul>
-<blockquote>
-<p><strong>Note:</strong> 未完待续.</p>
+<h2 id="创建spark2-sharelib"><a href="#创建spark2-sharelib" class="headerlink" title="创建spark2 sharelib"></a>创建spark2 sharelib</h2><p><strong>oozie sharelib</strong>集中存放了各种Action运行所需要的jar包，没有它们的存在，任务在执行的过程中会报<strong>ClassNotFoundException</strong>。  </p>
+<p>因此首要的任务就是要创建好spark2的sharelib.具体步骤如下：  </p>
+<ol>
+<li>在hdfs上的sharelib目录下创建spark2目录，注意，目录为spark/hive/oozie等的同级目录：<pre>hdfs dfs -mkdir /user/oozie/share/lib/lib_ts/spark2<br></pre>  </li>
+<li>将本地的spark2的jar目录下的jar包上传到步骤1创建的hdfs上的spark2目录：<pre>hdfs dfs -put /usr/hdp/version/spark2/jars/* /user/oozie/share/lib/lib_ts/spark2/<br></pre> </li>
+<li>将sharelib中spark目录下oozie-sharelib-spark jar拷贝到spar2的sharelib:<pre>hdfs dfs -cp \<br> /user/oozie/share/lib/lib_ts/spark/oozie-sharelib-spark-version.jar \<br> /user/oozie/share/lib/lib_ts/spark2/<br></pre> </li>
+<li>上传hive-site.xml文件到spark2的sharelib目录<pre>hdfs dfs -put /etc/hive/version/0/hive-site.xml /user/oozie/share/lib/lib_ts/spark2/<br></pre> </li>
+<li>上传Python包到spark2的sharelib<pre>hdfs dfs -put \<br> /usr/hdp/<version>/spark2/python/lib/py* \<br> /user/oozie/share/lib/lib_ts/spark2/<br></version></pre> </li>
+<li>配置OOZIE_URL环境变量<pre>export OOZIE_URL=<a href="http://ip:11000/oozie" target="_blank" rel="noopener">http://ip:11000/oozie</a><br></pre> </li>
+<li>验证是否配置成功<pre>oozie admin –shareliblist spark2<br></pre> </li>
+<li>在job.propeties文件中增加spark2 sharelib的配置：<pre>oozie.action.sharelib.for.spark=spark2<br></pre> </li>
+</ol>
+<h2 id="Sharelib-jar包调整"><a href="#Sharelib-jar包调整" class="headerlink" title="Sharelib jar包调整"></a>Sharelib jar包调整</h2><p>Sharelib的创建过程虽然只有短短7步，但是不一定会一帆风顺，如果成功创建spark2的sharelib，也许我们想大舒一口气，可是现实总是很残酷，因为万里长征可能才走了一小半.这时，通过oozie配置spark2 Action并执行，会得到如下的报错:  </p>
+<p><pre>java.lang.IllegalArgumentException: Attempt to add (hdfs://host:8020/user/oozie/share/lib/lib_ts/oozie/aws-java-sdk-core-1.10.6.jar) multiple times to the distributed cache.<br>    at org.apache.spark.deploy.yarn.Client$$anonfun$prepareLocalResources$13$$anonfun$apply$6.apply(Client.scala:619)<br>    at org.apache.spark.deploy.yarn.Client$$anonfun$prepareLocalResources$13$$anonfun$apply$6.apply(Client.scala:610)<br>    at scala.collection.mutable.ArraySeq.foreach(ArraySeq.scala:74)<br>    at org.apache.spark.deploy.yarn.Client$$anonfun$prepareLocalResources$13.apply(Client.scala:610)<br>    at org.apache.spark.deploy.yarn.Client$$anonfun$prepareLocalResources$13.apply(Client.scala:609)<br>    at scala.collection.immutable.List.foreach(List.scala:381)<br>    at org.apache.spark.deploy.yarn.Client.prepareLocalResources(Client.scala:609)<br>    at org.apache.spark.deploy.yarn.Client.createContainerLaunchContext(Client.scala:845)<br>    at org.apache.spark.deploy.yarn.Client.submitApplication(Client.scala:170)<br>    at org.apache.spark.deploy.yarn.Client.run(Client.scala:1174)<br>    at org.apache.spark.deploy.yarn.Client$.main(Client.scala:1233)<br>    at org.apache.spark.deploy.yarn.Client.main(Client.scala)<br>    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)<br>    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)<br>    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)<br>    at java.lang.reflect.Method.invoke(Method.java:498)<br>    at org.apache.spark.deploy.SparkSubmit$.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:782)<br>    at org.apache.spark.deploy.SparkSubmit$.doRunMain$1(SparkSubmit.scala:180)<br>    at org.apache.spark.deploy.SparkSubmit$.submit(SparkSubmit.scala:205)<br>    at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:119)<br>    at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)<br>    at org.apache.oozie.action.hadoop.SparkMain.runSpark(SparkMain.java:314)<br>    at org.apache.oozie.action.hadoop.SparkMain.run(SparkMain.java:235)<br>    at org.apache.oozie.action.hadoop.LauncherMain.run(LauncherMain.java:58)<br>    at org.apache.oozie.action.hadoop.SparkMain.main(SparkMain.java:63)<br>    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)<br>    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)<br>    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)<br>    at java.lang.reflect.Method.invoke(Method.java:498)<br>    at org.apache.oozie.action.hadoop.LauncherMapper.map(LauncherMapper.java:240)<br>    at org.apache.hadoop.mapred.MapRunner.run(MapRunner.java:54)<br>    at org.apache.hadoop.mapred.MapTask.runOldMapper(MapTask.java:453)<br>    at org.apache.hadoop.mapred.MapTask.run(MapTask.java:343)<br>    at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:170)<br>    at java.security.AccessController.doPrivileged(Native Method)<br>    at javax.security.auth.Subject.doAs(Subject.java:422)<br>    at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1869)<br>    at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:164)<br></pre><br>这不是末日，我们需要将sharelib中的jar包进行调整，步骤如下：  </p>
+<ol>
+<li>对spark2 sharelib中与oozie sharelib中的重复jar包进行删除，包括但不限于aws<em>.jar,azure</em>.jar,hadoop-aws<em>.jar,hadoop-azure</em>.jar,okio<em>.jar,okhttp</em>.jar等  </li>
+<li>移动oozie sharelib中的部分jar包到spark sharelib,包括jackson-*.jar  </li>
+<li>更新oozie sharelib<pre>oozie admin sharelibupdate<br></pre><br><strong>小贴士：</strong><blockquote>
+<p>1.hdp版本为<strong>2.6.4</strong>,oozie版本为<strong>4.2.0</strong>,spark版本为<strong>2.2.0</strong>.<br>2.oozie workflow.xml和job.properties的具体配置将会在下篇博客继续介绍。</p>
 </blockquote>
+</li>
+</ol>
 
       
     </div>
@@ -386,7 +397,11 @@
           
             <a href="/tags/大数据/" rel="tag"># 大数据</a>
           
-            <a href="/tags/Zookeeper/" rel="tag"># Zookeeper</a>
+            <a href="/tags/yarn/" rel="tag"># yarn</a>
+          
+            <a href="/tags/spark2/" rel="tag"># spark2</a>
+          
+            <a href="/tags/oozie/" rel="tag"># oozie</a>
           
         </div>
       
@@ -399,8 +414,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/20/并发环境下计算应用的TPS/" rel="next" title="并发环境下计算应用的TPS">
-                <i class="fa fa-chevron-left"></i> 并发环境下计算应用的TPS
+              <a href="/2018/04/24/spark on yarn/" rel="next" title="spark on yarn">
+                <i class="fa fa-chevron-left"></i> spark on yarn
               </a>
             
           </div>
@@ -408,10 +423,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/24/spark on yarn/" rel="prev" title="spark on yarn">
-                spark on yarn <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -543,7 +554,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#InterruptedException异常"><span class="nav-number">1.</span> <span class="nav-text">InterruptedException异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KeeperException异常"><span class="nav-number">2.</span> <span class="nav-text">KeeperException异常</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建spark2-sharelib"><span class="nav-number">1.</span> <span class="nav-text">创建spark2 sharelib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sharelib-jar包调整"><span class="nav-number">2.</span> <span class="nav-text">Sharelib jar包调整</span></a></li></ol></div>
             
 
           </div>
